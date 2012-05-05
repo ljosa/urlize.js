@@ -1,46 +1,46 @@
 test('Bare', function () {
-    equal(urlize('The website www.nemeet.com is down', true),
-	  'The website <a href="http://www.nemeet.com" rel="nofollow">www.nemeet.com</a> is down');
+    equal(urlize('The website www.ljosa.com is down', true),
+	  'The website <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a> is down');
 });
 
 test('Complete', function () {
-    equal(urlize('The website http://www.nemeet.com/ is down', true),
-	  'The website <a href="http://www.nemeet.com/" rel="nofollow">http://www.nemeet.com/</a> is down');
+    equal(urlize('The website http://www.ljosa.com/ is down', true),
+	  'The website <a href="http://www.ljosa.com/" rel="nofollow">http://www.ljosa.com/</a> is down');
 });
 
 test ('Beginning bare', function () {
-    equal(urlize('www.nemeet.com is down', true),
-	  '<a href="http://www.nemeet.com" rel="nofollow">www.nemeet.com</a> is down');
+    equal(urlize('www.ljosa.com is down', true),
+	  '<a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a> is down');
 });
 
 test ('End complete', function () {
-    equal(urlize('Go to http://www.nemeet.com/', true),
-	  'Go to <a href="http://www.nemeet.com/" rel="nofollow">http://www.nemeet.com/</a>');
+    equal(urlize('Go to http://www.ljosa.com/', true),
+	  'Go to <a href="http://www.ljosa.com/" rel="nofollow">http://www.ljosa.com/</a>');
 });
 
 test ('End bare', function () {
-    equal(urlize('Go to www.nemeet.com', true),
-	  'Go to <a href="http://www.nemeet.com" rel="nofollow">www.nemeet.com</a>');
+    equal(urlize('Go to www.ljosa.com', true),
+	  'Go to <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
 });
 
 test ('End bare non-com', function () {
-    equal(urlize('Go to www.nemeet.no', true),
-	  'Go to <a href="http://www.nemeet.no" rel="nofollow">www.nemeet.no</a>');
+    equal(urlize('Go to www.ljosa.priv.no', true),
+	  'Go to <a href="http://www.ljosa.priv.no" rel="nofollow">www.ljosa.priv.no</a>');
 });
 
 test ('End bare non-com trim period', function () {
-    equal(urlize('Go to www.nemeet.no.', true),
-	  'Go to <a href="http://www.nemeet.no" rel="nofollow">www.nemeet.no</a>.');
+    equal(urlize('Go to www.ljosa.priv.no.', true),
+	  'Go to <a href="http://www.ljosa.priv.no" rel="nofollow">www.ljosa.priv.no</a>.');
 });
 
 test ('End complete non-com', function () {
-    equal(urlize('Go to http://www.nemeet.no', true),
-	  'Go to <a href="http://www.nemeet.no" rel="nofollow">http://www.nemeet.no</a>');
+    equal(urlize('Go to http://www.ljosa.priv.no', true),
+	  'Go to <a href="http://www.ljosa.priv.no" rel="nofollow">http://www.ljosa.priv.no</a>');
 });
 
 test ('End complete trim period', function () {
-    equal(urlize('Go to http://www.nemeet.no.', true),
-	  'Go to <a href="http://www.nemeet.no" rel="nofollow">http://www.nemeet.no</a>.');
+    equal(urlize('Go to http://www.ljosa.priv.no.', true),
+	  'Go to <a href="http://www.ljosa.priv.no" rel="nofollow">http://www.ljosa.priv.no</a>.');
 });
 
 test('Email', function () {
@@ -61,5 +61,25 @@ test('IDN', function () {
 test('Bare parens', function () {
     equal(urlize('My web site (www.ljosa.com)', true),
 	  'My web site (<a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>)');
+});
+
+test('No autoescape parameter', function () {
+    equal(urlize('This <b>is</b> www.ljosa.com', true),
+	  'This <b>is</b> <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
+});
+
+test('autoescape == false', function () {
+    equal(urlize('This <b>is</b> www.ljosa.com', true, false),
+	  'This <b>is</b> <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
+});
+
+test('autoescape == true', function () {
+    equal(urlize('This <b>is</b> www.ljosa.com', true, true),
+	  'This &lt;b&gt;is&lt;/b&gt; <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
+});
+
+test('url_trim_Limit', function () {
+    equal(urlize('When you go to www.nemeet.com/somethinglong, you will find it.', false, true, 20),
+	  'When you go to <a href="http://www.nemeet.com/somethinglong">www.nemeet.com/so...</a>, you will find it.');
 });
 
