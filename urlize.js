@@ -50,7 +50,7 @@ function htmlescape(html) {
     return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
-function urlize(text, nofollow, autoescape, trim_url_limit) {
+function urlize(text, nofollow, autoescape, trim_url_limit, target) {
     function trim_url(x, limit) {
 	if (limit === undefined)
 	    limit = trim_url_limit;
@@ -95,6 +95,8 @@ function urlize(text, nofollow, autoescape, trim_url_limit) {
 	    // Make URL we want to point to.
 	    var url = undefined;
 	    var nofollow_attr = nofollow ? ' rel="nofollow"' : '';
+	    var target_attr = target ? ' target="'+target +'"' : '';
+	    
 	    if (middle.match(simple_url_re))
 		url = smart_urlquote(middle);
 	    else if (middle.match(simple_url_2_re))
@@ -115,7 +117,7 @@ function urlize(text, nofollow, autoescape, trim_url_limit) {
 		    url = htmlescape(url);
 		    trimmed = htmlescape(trimmed);
 		}
-		middle = '<a href="' + url + '"' + nofollow_attr + '>' + trimmed + '</a>';
+		middle = '<a href="' + url + '"' + nofollow_attr + target_attr + '>' + trimmed + '</a>';
 		words[i] = lead + middle + trail;
 	    } else {
 		if (safe_input) {
