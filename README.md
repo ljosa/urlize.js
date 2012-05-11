@@ -1,4 +1,3 @@
-
 urlize.js
 =========
 
@@ -13,7 +12,7 @@ do the right thing.
 Usage
 -----
 
-> `urlize(`*text*`, `*nofollow*`, `*autoescape*`, `*trim_url_limit*`)`
+> `urlize(`*text*`, `*nofollow*`, `*autoescape*`, `*trim_url_limit*`, `*target*` )`
 > &#x21D2; *html*
 
 *Text* is the text in which to identify URLs.
@@ -25,7 +24,10 @@ The remaining arguments are optional (if not given, they are
 (&amp;&lt;&gt;&quot;&#39;) will be escaped. If given, *trim_url_limit*
 should be a positive integer. The displayed URLs (contents of the A
 elements) will be truncated to three characters less than the
-specified length, and three periods (...) will be added.
+specified length, and three periods (...) will be added. `target`
+parameter allows you to specify html `target=""` parameter. For 
+example, to make generate links that open in a new window, use 
+`_blank` as `target` parameter.
 
 Raison d'&ecirc;tre
 -------------
