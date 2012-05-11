@@ -83,3 +83,17 @@ test('url_trim_Limit', function () {
 	  'When you go to <a href="http://www.nemeet.com/somethinglong">www.nemeet.com/so...</a>, you will find it.');
 });
 
+test('No target parameter', function () {
+    equal(urlize('Open the following in the same window www.ljosa.com', true, false, 20),
+	  'Open the following in the same window <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
+});
+
+test('target == _blank', function () {
+    equal(urlize('Open the following in new window www.ljosa.com', true, false, 20, '_blank'),
+	  'Open the following in new window <a href="http://www.ljosa.com" rel="nofollow" target="_blank">www.ljosa.com</a>');
+});
+
+test('target == _self', function () {
+    equal(urlize('Open the following in the same window www.ljosa.com', true, false, 20, '_self'),
+	  'Open the following in the same window <a href="http://www.ljosa.com" rel="nofollow" target="_self">www.ljosa.com</a>');
+});
