@@ -97,3 +97,23 @@ test('target == _self', function () {
     equal(urlize('Open the following in the same window www.ljosa.com', true, false, 20, '_self'),
 	  'Open the following in the same window <a href="http://www.ljosa.com" rel="nofollow" target="_self">www.ljosa.com</a>');
 });
+
+test('autoescape == False and ampersands', function () {
+    equal(urlize('http://foo.bar/?a=1&b=2', false, false),
+	  '<a href="http://foo.bar/?a=1&b=2">http://foo.bar/?a=1&b=2</a>');
+});
+
+test('autoescape == True and ampersands', function () {
+    equal(urlize('http://foo.bar/?a=1&b=2', false, true),
+	  '<a href="http://foo.bar/?a=1&amp;b=2">http://foo.bar/?a=1&amp;b=2</a>');
+});
+
+test('autoescape == False and troublesome ampersands', function () {
+    equal(urlize('http://foo.bar/?a=1&amp;=2', false, false),
+	  '<a href="http://foo.bar/?a=1&amp;=2">http://foo.bar/?a=1&amp;=2</a>');
+});
+
+test('autoescape == True and troublesome ampersands', function () {
+    equal(urlize('http://foo.bar/?a=1&amp;=2', false, true),
+	  '<a href="http://foo.bar/?a=1&amp;amp;=2">http://foo.bar/?a=1&amp;amp;=2</a>');
+});
