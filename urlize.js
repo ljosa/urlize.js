@@ -50,10 +50,25 @@ function htmlescape(html) {
     return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
-function urlize(text, nofollow, autoescape, trim_url_limit, target) {
+function convert_arguments(args) {
+    console.log(args);
+    var options;
+    if (args.length == 2 && typeof(args[1]) == 'object') {
+	options = args[1];
+    } else {
+	options = {nofollow: args[1],
+		   autoescape: args[2],
+		   trim_url_limit: args[3],
+		   target: args[4]};
+    }
+    return options;
+}
+
+function urlize(text, options) {
+    options = convert_arguments(arguments);
     function trim_url(x, limit) {
 	if (limit === undefined)
-	    limit = trim_url_limit;
+	    limit = options.trim_url_limit;
 	if (limit && x.length > limit)
 		return x.substr(0, limit - 3) + '...';
 	return x;
@@ -94,8 +109,8 @@ function urlize(text, nofollow, autoescape, trim_url_limit, target) {
 
 	    // Make URL we want to point to.
 	    var url = undefined;
-	    var nofollow_attr = nofollow ? ' rel="nofollow"' : '';
-	    var target_attr = target ? ' target="'+target +'"' : '';
+	    var nofollow_attr = options.nofollow ? ' rel="nofollow"' : '';
+	    var target_attr = options.target ? ' target="' + options.target + '"' : '';
 	    
 	    if (middle.match(simple_url_re))
 		url = smart_urlquote(middle);
@@ -110,7 +125,7 @@ function urlize(text, nofollow, autoescape, trim_url_limit, target) {
 	    // Make link.
 	    if (url) {
 		var trimmed = trim_url(middle);
-		if (autoescape) {
+		if (options.autoescape) {
 		    // XXX: Assuming autoscape == false
 		    lead = htmlescape(lead);
 		    trail = htmlescape(trail);
@@ -122,18 +137,21 @@ function urlize(text, nofollow, autoescape, trim_url_limit, target) {
 	    } else {
 		if (safe_input) {
 		    // Do nothing, as we have no mark_safe.
-		} else if (autoescape) {
+		} else if (options.autoescape) {
 		    words[i] = htmlescape(word);
 		}
 	    }
 	} else if (safe_input) {
 	    // Do nothing, as we have no mark_safe.
-	} else if (autoescape) {
+	} else if (options.autoescape) {
 	    words[i] = htmlescape(word);
 	}
     }
     return words.join('');
 }
+
+urlize.test = {};
+urlize.test.convert_arguments = convert_arguments;
 
 return urlize;
 })();

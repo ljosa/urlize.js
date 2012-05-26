@@ -12,6 +12,33 @@ do the right thing.
 Usage
 -----
 
+> `urlize(`*text*`, `*options*`)`
+> &#x21D2; *html*
+
+*Text* is the text in which to identify URLs.
+
+*Options* is optional. If present, it should be an object with some of
+ the following attributes, all of which default to `undefined`:
+
+- *nofollow*: Set to true in order to add the attribute
+`rel="nofollow"` to the generated `A` elements.
+
+- *autoescape*: Set to true in order to have urlize.js escape
+characters that have meaning in HTML (&amp;&lt;&gt;&quot;&#39;). You
+will almost certainly want to use this option when rendering text
+entered by a user in order to avoid spam links and cross-site
+scripting attacks.
+
+- *trim_url_limit*: Set to a positive integer not less than 3 in order
+to truncate the displayed URLs (contents of the A elements) to three
+characters less than the specified length and add three periods (...).
+
+- *target*: Set to a string in order to add a `target=""` attribute
+to the generated `A` elements. For example, to make generate links
+that open in a new window, set to `_blank`.
+
+### Options as positional arguments (deprecated)
+
 > `urlize(`*text*`, `*nofollow*`, `*autoescape*`, `*trim_url_limit*`, `*target*` )`
 > &#x21D2; *html*
 
