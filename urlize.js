@@ -40,8 +40,11 @@ function smart_urlquote(url) {
 }
 
 var trailing_punctuation = ['.', ',', ':', ';'];
-var wrapping_punctuation = [['(', ')'], ['<', '>'], ['&lt;', '&gt;']];
-var word_split_re = /(\s+)/;
+var wrapping_punctuation_django = [['(', ')'], ['<', '>'], ['&lt;', '&gt;']];
+var wrapping_punctuation_improved = [['(', ')'], ['<', '>'], ['&lt;', '&gt;'], 
+				     ['“', '”'], ['‘', '’']];
+var word_split_re_django = /(\s+)/;
+var word_split_re_improved = /([\s<>"]+)/;
 var simple_url_re = /^https?:\/\/\w/;
 var simple_url_2_re = /^www\.|^(?!http)\w[^@]+\.(com|edu|gov|int|mil|net|org)$/;
 var simple_email_re = /^\S+@\S+\.\S+$/;
@@ -51,7 +54,6 @@ function htmlescape(html) {
 }
 
 function convert_arguments(args) {
-    console.log(args);
     var options;
     if (args.length == 2 && typeof(args[1]) == 'object') {
 	options = args[1];
@@ -61,6 +63,8 @@ function convert_arguments(args) {
 		   trim_url_limit: args[3],
 		   target: args[4]};
     }
+    if (!('django_compatible' in options))
+	options.django_compatible = true;
     return options;
 }
 
@@ -74,6 +78,8 @@ function urlize(text, options) {
 	return x;
     }
     var safe_input = false;
+    var word_split_re = options.django_compatible ? word_split_re_django : word_split_re_improved;
+    var wrapping_punctuation = options.django_compatible ? wrapping_punctuation_django : wrapping_punctuation_improved;
     var words = text.split(word_split_re);
     for (var i = 0; i < words.length; i++) { 
 	var word = words[i];

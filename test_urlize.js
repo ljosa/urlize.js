@@ -174,7 +174,8 @@ test('single argument', function () {
 	autoescape: undefined,
 	nofollow: undefined,
 	target: undefined,
-	trim_url_limit: undefined
+	trim_url_limit: undefined,
+	django_compatible: true
     });
 });
 
@@ -202,5 +203,67 @@ test('four arguments, fourth is integer', function () {
 test('five arguments, fifth is string', function () {
     equal(urlize.test.convert_arguments(['foo', false, false, undefined, undefined]).target, undefined);
     equal(urlize.test.convert_arguments(['foo', false, false, undefined, '_blank']).target, '_blank');
+});
+
+test('django_compatible', function () {
+    ok(urlize.test.convert_arguments(['foo']).django_compatible);
+    ok(!urlize.test.convert_arguments(['foo', {django_compatible: false}]).django_compatible);
+});
+
+
+
+module('Improvements over Django');
+
+test('adjacent angle brackets', function () {
+    equal(urlize('<b>http://example.com</b>'), '<b>http://example.com</b>');
+    equal(urlize('<b>http://example.com</b>', {django_compatible: false}), 
+	  '<b><a href="http://example.com">http://example.com</a></b>');
+    equal(urlize('<b>www.example.com</b>'), '<b>www.example.com</b>');
+    equal(urlize('<b>www.example.com</b>', {django_compatible: false}), 
+	  '<b><a href="http://www.example.com">www.example.com</a></b>');
+});
+
+test('enclosing fancy double quotes', function () {
+    equal(urlize('The link “http://example.com” is broken'), 
+	  'The link “http://example.com” is broken');
+    equal(urlize('The link “http://example.com” is broken', {django_compatible: false}), 
+	  'The link “<a href="http://example.com">http://example.com</a>” is broken');
+    equal(urlize('The link “www.example.com” is broken'), 
+	  'The link “www.example.com” is broken');
+    equal(urlize('The link “www.example.com” is broken', {django_compatible: false}), 
+	  'The link “<a href="http://www.example.com">www.example.com</a>” is broken');
+});
+
+test('enclosing fancy single quotes', function () {
+    equal(urlize('The link ‘http://example.com’ is broken'), 
+	  'The link ‘http://example.com’ is broken');
+    equal(urlize('The link ‘http://example.com’ is broken', {django_compatible: false}), 
+	  'The link ‘<a href="http://example.com">http://example.com</a>’ is broken');
+    equal(urlize('The link ‘www.example.com’ is broken'), 
+	  'The link ‘www.example.com’ is broken');
+    equal(urlize('The link ‘www.example.com’ is broken', {django_compatible: false}), 
+	  'The link ‘<a href="http://www.example.com">www.example.com</a>’ is broken');
+});
+
+test('enclosing double quotes', function () {
+    equal(urlize('The link "http://example.com" is broken'), 
+	  'The link "http://example.com" is broken');
+    equal(urlize('The link "http://example.com" is broken', {django_compatible: false}), 
+	  'The link "<a href="http://example.com">http://example.com</a>" is broken');
+    equal(urlize('The link "www.example.com" is broken'), 
+	  'The link "www.example.com" is broken');
+    equal(urlize('The link "www.example.com" is broken', {django_compatible: false}), 
+	  'The link "<a href="http://www.example.com">www.example.com</a>" is broken');
+});
+
+test('Colon before', function () {
+    equal(urlize('Here is the link:http://example.com'), 
+	  'Here is the link:http://example.com');
+    equal(urlize('Here is the link:http://example.com', {django_compatible: false}), 
+	  'Here is the link:<a href="http://example.com">http://example.com</a>');
+    equal(urlize('Here is the link:www.example.com'), 
+	  'Here is the link:www.example.com');
+    equal(urlize('Here is the link:www.example.com', {django_compatible: false}), 
+	  'Here is the link:<a href="http://www.example.com">www.example.com</a>');
 });
 

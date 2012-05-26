@@ -37,6 +37,11 @@ characters less than the specified length and add three periods (...).
 to the generated `A` elements. For example, to make generate links
 that open in a new window, set to `_blank`.
 
+- *django_compatible*: Set to false in order to enable URL-detection
+  improvements over Django's implementation. This option is true by
+  default so that urlize.js in its default mode behaves exactly like
+  Django's urlize function. See the section *Compatibility with Django*.
+
 ### Options as positional arguments (deprecated)
 
 > `urlize(`*text*`, `*nofollow*`, `*autoescape*`, `*trim_url_limit*`, `*target*` )`
@@ -72,7 +77,8 @@ in the Python-based web framework [Django](https://www.djangoproject.com/). I th
 Compatibility with Django
 -------------------------
 
-It is a goal for my port to be always produce the same results as the
+It is a goal for urlize.js to, in the default mode, always produce the
+same results as the
 [`django.utils.html.urlize`](https://docs.djangoproject.com/en/1.4/ref/templates/builtins/)
 function in the latest release of
 [Django](https://www.djangoproject.com/). That way, a Django
@@ -82,6 +88,7 @@ or
 [`urlizetrunc`](https://docs.djangoproject.com/en/1.4/ref/templates/builtins/#urlizetrunc)
 filter) or on the client side (using this port, e.g., in order to show
 a dynamic preview while the text is being entered). Any difference
-between the two implementations is considered a bug.
+between the two implementations is considered a bug. See the option
+*django_compatible* in the *Usage* section.
 
 
