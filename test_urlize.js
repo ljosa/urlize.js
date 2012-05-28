@@ -5,7 +5,7 @@ test('Two words, no URL', function () {
 });
 
 test('Split words', function () {
-    deepEqual('foo bar'.split(/(\s+)/), ['foo', ' ', 'bar']);
+    deepEqual(urlize.test.split('foo bar', /(\s+)/), ['foo', ' ', 'bar']);
 });
 
 module('Basic functionality');
