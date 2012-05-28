@@ -1,3 +1,15 @@
+module('IE7');
+
+test('Two words, no URL', function () {
+    equal(urlize('foo bar'), 'foo bar');
+});
+
+test('Split words', function () {
+    deepEqual('foo bar'.split(/(\s+)/), ['foo', ' ', 'bar']);
+});
+
+module('Basic functionality');
+
 test('Bare', function () {
     equal(urlize('The website www.ljosa.com is down', true),
 	  'The website <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a> is down');
