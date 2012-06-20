@@ -132,21 +132,21 @@ test('trim_url_limit', function () {
 test('No target parameter', function () {
     equal(urlize('Open the following in the same window www.ljosa.com', true, false, 20),
 	  'Open the following in the same window <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
-    equal(urlize('Open the following in the same window www.ljosa.com', {nofollow: true, url_trim_limit: 20}),
+    equal(urlize('Open the following in the same window www.ljosa.com', {nofollow: true, trim_url_limit: 20}),
 	  'Open the following in the same window <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
 });
 
 test('target == _blank', function () {
     equal(urlize('Open the following in new window www.ljosa.com', true, false, 20, '_blank'),
 	  'Open the following in new window <a href="http://www.ljosa.com" rel="nofollow" target="_blank">www.ljosa.com</a>');
-    equal(urlize('Open the following in new window www.ljosa.com', {nofollow: true, url_trim_limit: 20, target: '_blank'}),
+    equal(urlize('Open the following in new window www.ljosa.com', {nofollow: true, trim_url_limit: 20, target: '_blank'}),
 	  'Open the following in new window <a href="http://www.ljosa.com" rel="nofollow" target="_blank">www.ljosa.com</a>');
 });
 
 test('target == _self', function () {
     equal(urlize('Open the following in the same window www.ljosa.com', true, false, 20, '_self'),
 	  'Open the following in the same window <a href="http://www.ljosa.com" rel="nofollow" target="_self">www.ljosa.com</a>');
-    equal(urlize('Open the following in the same window www.ljosa.com', {nofollow: true, url_trim_limit: 20, target: '_self'}),
+    equal(urlize('Open the following in the same window www.ljosa.com', {nofollow: true, trim_url_limit: 20, target: '_self'}),
 	  'Open the following in the same window <a href="http://www.ljosa.com" rel="nofollow" target="_self">www.ljosa.com</a>');
 });
 
@@ -228,54 +228,54 @@ module('Improvements over Django');
 
 test('adjacent angle brackets', function () {
     equal(urlize('<b>http://example.com</b>'), '<b>http://example.com</b>');
-    equal(urlize('<b>http://example.com</b>', {django_compatible: false}), 
+    equal(urlize('<b>http://example.com</b>', {django_compatible: false}),
 	  '<b><a href="http://example.com">http://example.com</a></b>');
     equal(urlize('<b>www.example.com</b>'), '<b>www.example.com</b>');
-    equal(urlize('<b>www.example.com</b>', {django_compatible: false}), 
+    equal(urlize('<b>www.example.com</b>', {django_compatible: false}),
 	  '<b><a href="http://www.example.com">www.example.com</a></b>');
 });
 
 test('enclosing fancy double quotes', function () {
-    equal(urlize('The link “http://example.com” is broken'), 
+    equal(urlize('The link “http://example.com” is broken'),
 	  'The link “http://example.com” is broken');
-    equal(urlize('The link “http://example.com” is broken', {django_compatible: false}), 
+    equal(urlize('The link “http://example.com” is broken', {django_compatible: false}),
 	  'The link “<a href="http://example.com">http://example.com</a>” is broken');
-    equal(urlize('The link “www.example.com” is broken'), 
+    equal(urlize('The link “www.example.com” is broken'),
 	  'The link “www.example.com” is broken');
-    equal(urlize('The link “www.example.com” is broken', {django_compatible: false}), 
+    equal(urlize('The link “www.example.com” is broken', {django_compatible: false}),
 	  'The link “<a href="http://www.example.com">www.example.com</a>” is broken');
 });
 
 test('enclosing fancy single quotes', function () {
-    equal(urlize('The link ‘http://example.com’ is broken'), 
+    equal(urlize('The link ‘http://example.com’ is broken'),
 	  'The link ‘http://example.com’ is broken');
-    equal(urlize('The link ‘http://example.com’ is broken', {django_compatible: false}), 
+    equal(urlize('The link ‘http://example.com’ is broken', {django_compatible: false}),
 	  'The link ‘<a href="http://example.com">http://example.com</a>’ is broken');
-    equal(urlize('The link ‘www.example.com’ is broken'), 
+    equal(urlize('The link ‘www.example.com’ is broken'),
 	  'The link ‘www.example.com’ is broken');
-    equal(urlize('The link ‘www.example.com’ is broken', {django_compatible: false}), 
+    equal(urlize('The link ‘www.example.com’ is broken', {django_compatible: false}),
 	  'The link ‘<a href="http://www.example.com">www.example.com</a>’ is broken');
 });
 
 test('enclosing double quotes', function () {
-    equal(urlize('The link "http://example.com" is broken'), 
+    equal(urlize('The link "http://example.com" is broken'),
 	  'The link "http://example.com" is broken');
-    equal(urlize('The link "http://example.com" is broken', {django_compatible: false}), 
+    equal(urlize('The link "http://example.com" is broken', {django_compatible: false}),
 	  'The link "<a href="http://example.com">http://example.com</a>" is broken');
-    equal(urlize('The link "www.example.com" is broken'), 
+    equal(urlize('The link "www.example.com" is broken'),
 	  'The link "www.example.com" is broken');
-    equal(urlize('The link "www.example.com" is broken', {django_compatible: false}), 
+    equal(urlize('The link "www.example.com" is broken', {django_compatible: false}),
 	  'The link "<a href="http://www.example.com">www.example.com</a>" is broken');
 });
 
 test('Colon before', function () {
-    equal(urlize('Here is the link:http://example.com'), 
+    equal(urlize('Here is the link:http://example.com'),
 	  'Here is the link:http://example.com');
-    equal(urlize('Here is the link:http://example.com', {django_compatible: false}), 
+    equal(urlize('Here is the link:http://example.com', {django_compatible: false}),
 	  'Here is the link:<a href="http://example.com">http://example.com</a>');
-    equal(urlize('Here is the link:www.example.com'), 
+    equal(urlize('Here is the link:www.example.com'),
 	  'Here is the link:www.example.com');
-    equal(urlize('Here is the link:www.example.com', {django_compatible: false}), 
+    equal(urlize('Here is the link:www.example.com', {django_compatible: false}),
 	  'Here is the link:<a href="http://www.example.com">www.example.com</a>');
 });
 
