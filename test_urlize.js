@@ -279,3 +279,7 @@ test('Colon before', function () {
 	  'Here is the link:<a href="http://www.example.com">www.example.com</a>');
 });
 
+test ('End trim period and paren', function () {
+    equal(urlize('(Go to http://www.ljosa.priv.no/foo.)', {django_compatible: false}),
+	  '(Go to <a href="http://www.ljosa.priv.no/foo">http://www.ljosa.priv.no/foo</a>.)');
+});
