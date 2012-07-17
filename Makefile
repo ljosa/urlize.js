@@ -5,4 +5,4 @@ ALL = urlize.min.js
 all: $(ALL)
 
 %.min.js: %.js
-	uglifyjs $< > $@
+	uglifyjs $< > $@.tmp && mv $@.tmp $@ || rm -f $@
