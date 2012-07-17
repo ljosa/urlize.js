@@ -159,7 +159,8 @@ function smart_urlquote(url) {
     }
 }
 
-var trailing_punctuation = ['.', ',', ':', ';'];
+var trailing_punctuation_django = ['.', ',', ':', ';'];
+var trailing_punctuation_improved = ['.', ',', ':', ';', '.)'];
 var wrapping_punctuation_django = [['(', ')'], ['<', '>'], ['&lt;', '&gt;']];
 var wrapping_punctuation_improved = [['(', ')'], ['<', '>'], ['&lt;', '&gt;'], 
 				     ['“', '”'], ['‘', '’']];
@@ -199,6 +200,7 @@ function urlize(text, options) {
     }
     var safe_input = false;
     var word_split_re = options.django_compatible ? word_split_re_django : word_split_re_improved;
+    var trailing_punctuation = options.django_compatible ? trailing_punctuation_django : trailing_punctuation_improved;
     var wrapping_punctuation = options.django_compatible ? wrapping_punctuation_django : wrapping_punctuation_improved;
     var words = split(text, word_split_re);
     for (var i = 0; i < words.length; i++) { 
