@@ -162,7 +162,7 @@ var urlize = (function () {
                                        ['“', '”'], ['‘', '’']];
   var word_split_re_django = /(\s+)/;
   var word_split_re_improved = /([\s<>"]+)/;
-  var simple_url_re = /^https?:\/\/\w/;
+  var simple_url_re = /^https?:(\/|(&#47;))(\/|(&#47;))\w/;
   var simple_url_2_re = /^www\.|^(?!http)\w[^@]+\.(com|edu|gov|int|mil|net|org)$/;
   var simple_email_re = /^\S+@\S+\.\S+$/;
 
