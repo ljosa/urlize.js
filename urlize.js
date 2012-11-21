@@ -176,6 +176,14 @@ var urlize = (function () {
       .replace(/\//g, "&#47;");
   }
 
+  function urlescape(url) {
+    return url // Do not escape slash, because is used for the http:// part
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
   function convert_arguments(args) {
     var options;
     if (args.length == 2 && typeof (args[1]) == 'object') {
@@ -253,7 +261,7 @@ var urlize = (function () {
             // XXX: Assuming autoscape == false
             lead = htmlescape(lead);
             trail = htmlescape(trail);
-            url = htmlescape(url);
+            url = urlescape(url);
             trimmed = htmlescape(trimmed);
           }
           middle = '<a href="' + url + '"' + nofollow_attr + target_attr + '>' + trimmed + '</a>';
