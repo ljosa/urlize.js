@@ -167,11 +167,13 @@ var urlize = (function () {
   var simple_email_re = /^\S+@\S+\.\S+$/;
 
   function htmlescape(html) {
-    return html.replace(/&/g, "&amp;")
+    return html
+      .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
+      .replace(/'/g, "&#39;")
+      .replace(/\//g, "&#47;");
   }
 
   function convert_arguments(args) {
