@@ -183,6 +183,16 @@ test('Mixed-case protocol', function () {
           'My Link <a href="http://www.Example.com">Http://www.Example.com</a>');
 });
 
+test('Mixed-case TLD', function () {
+    equal(urlize('My Link example.Com'),
+          'My Link <a href="http://example.Com">example.Com</a>');
+});
+
+test('Mixed-case www', function () {
+    equal(urlize('My Link Www.example.no'),
+          'My Link <a href="http://Www.example.no">Www.example.no</a>');
+});
+
 
 module('convert_arguments');
 
@@ -275,11 +285,11 @@ test('enclosing double quotes', function () {
 
 test('Colon before', function () {
     equal(urlize('Here is the link:http://example.com'),
-	  'Here is the link:http://example.com');
+	  'Here is the <a href="http://link:http://example.com">link:http://example.com</a>');
     equal(urlize('Here is the link:http://example.com', {django_compatible: false}),
 	  'Here is the link:<a href="http://example.com">http://example.com</a>');
     equal(urlize('Here is the link:www.example.com'),
-	  'Here is the link:www.example.com');
+	  'Here is the <a href="http://link:www.example.com">link:www.example.com</a>');
     equal(urlize('Here is the link:www.example.com', {django_compatible: false}),
 	  'Here is the link:<a href="http://www.example.com">www.example.com</a>');
 });
