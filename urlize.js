@@ -150,6 +150,10 @@ var unquoted_percents_re = /%(?![0-9A-Fa-f]{2})/;
 function smart_urlquote(url) {
     // XXX: Not handling IDN.
     // 
+    // Convert protocol to lowercase.
+    var colonIndex = url.indexOf(':');
+    url = url.substring(0, colonIndex).toLowerCase() + url.substring(colonIndex);
+    // 
     // An URL is considered unquoted if it contains no % characters or
     // contains a % not followed by two hexadecimal digits.
     if (url.indexOf('%') == -1 || url.match(unquoted_percents_re)) {
@@ -166,7 +170,7 @@ var wrapping_punctuation_improved = [['(', ')'], ['<', '>'], ['&lt;', '&gt;'],
 				     ['“', '”'], ['‘', '’']];
 var word_split_re_django = /(\s+)/;
 var word_split_re_improved = /([\s<>"]+)/;
-var simple_url_re = /^https?:\/\/\w/;
+var simple_url_re = /^https?:\/\/\w/i;
 var simple_url_2_re = /^www\.|^(?!http)\w[^@]+\.(com|edu|gov|int|mil|net|org)$/;
 var simple_email_re = /^\S+@\S+\.\S+$/;
 

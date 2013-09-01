@@ -178,6 +178,11 @@ test('autoescape == True and troublesome ampersands', function () {
 	  '<a href="http://foo.bar/?a=1&amp;amp;=2">http://foo.bar/?a=1&amp;amp;=2</a>');
 });
 
+test('Mixed-case protocol', function () {
+    equal(urlize('My Link Http://www.Example.com'),
+          'My Link <a href="http://www.Example.com">Http://www.Example.com</a>');
+});
+
 
 module('convert_arguments');
 
