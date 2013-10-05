@@ -118,16 +118,16 @@ test('autoescape == false', function () {
 
 test('autoescape == true', function () {
   equal(urlize('This <b>is</b> www.ljosa.com', true, true),
-   'This &lt;b&gt;is&lt;&#47;b&gt; <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
+   'This &lt;b&gt;is&lt;/b&gt; <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
   equal(urlize('This <b>is</b> www.ljosa.com', {nofollow: true, autoescape: true}),
-   'This &lt;b&gt;is&lt;&#47;b&gt; <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
+   'This &lt;b&gt;is&lt;/b&gt; <a href="http://www.ljosa.com" rel="nofollow">www.ljosa.com</a>');
 });
 
 test('trim_url_limit', function () {
   equal(urlize('When you go to www.nemeet.com/somethinglong, you will find it.', false, true, 20),
-   'When you go to <a href="http://www.nemeet.com/somethinglong">www.nemeet.com&#47;so...</a>, you will find it.');
+   'When you go to <a href="http://www.nemeet.com/somethinglong">www.nemeet.com/so...</a>, you will find it.');
   equal(urlize('When you go to www.nemeet.com/somethinglong, you will find it.', {autoescape: true, trim_url_limit: 20}),
-   'When you go to <a href="http://www.nemeet.com/somethinglong">www.nemeet.com&#47;so...</a>, you will find it.');
+   'When you go to <a href="http://www.nemeet.com/somethinglong">www.nemeet.com/so...</a>, you will find it.');
 });
 
 test('No target parameter', function () {
@@ -160,9 +160,9 @@ test('autoescape == False and ampersands', function () {
 
 test('autoescape == True and ampersands', function () {
   equal(urlize('http://foo.bar/?a=1&b=2', false, true),
-   '<a href="http://foo.bar/?a=1&amp;b=2">http:&#47;&#47;foo.bar&#47;?a=1&amp;b=2</a>');
+   '<a href="http://foo.bar/?a=1&amp;b=2">http://foo.bar/?a=1&amp;b=2</a>');
   equal(urlize('http://foo.bar/?a=1&b=2', {autoescape: true}),
-   '<a href="http://foo.bar/?a=1&amp;b=2">http:&#47;&#47;foo.bar&#47;?a=1&amp;b=2</a>');
+   '<a href="http://foo.bar/?a=1&amp;b=2">http://foo.bar/?a=1&amp;b=2</a>');
 });
 
 test('autoescape == False and troublesome ampersands', function () {
@@ -174,14 +174,14 @@ test('autoescape == False and troublesome ampersands', function () {
 
 test('autoescape == True and troublesome ampersands', function () {
   equal(urlize('http://foo.bar/?a=1&amp;=2', false, true),
-   '<a href="http://foo.bar/?a=1&amp;amp;=2">http:&#47;&#47;foo.bar&#47;?a=1&amp;amp;=2</a>');
+   '<a href="http://foo.bar/?a=1&amp;amp;=2">http://foo.bar/?a=1&amp;amp;=2</a>');
   equal(urlize('http://foo.bar/?a=1&amp;=2', {autoescape: true}),
-   '<a href="http://foo.bar/?a=1&amp;amp;=2">http:&#47;&#47;foo.bar&#47;?a=1&amp;amp;=2</a>');
+   '<a href="http://foo.bar/?a=1&amp;amp;=2">http://foo.bar/?a=1&amp;amp;=2</a>');
 });
 
 test('autoescape == True and double quotes', function () {
   equal(urlize('http://foo.bar/evilquote"/>script', false, true),
-    '<a href="http://foo.bar/evilquote%22/%3Escript">http:&#47;&#47;foo.bar&#47;evilquote&quot;&#47;&gt;script</a>');
+    '<a href="http://foo.bar/evilquote%22/%3Escript">http://foo.bar/evilquote&quot;/&gt;script</a>');
 });
 
 test('Mixed-case protocol', function () {
@@ -278,29 +278,36 @@ test('enclosing fancy single quotes', function () {
 });
 
 test('enclosing double quotes', function () {
-    equal(urlize('The link "http://example.com" is broken'),
+  equal(urlize('The link "http://example.com" is broken'),
 	  'The link "http://example.com" is broken');
-    equal(urlize('The link "http://example.com" is broken', {django_compatible: false}),
+  equal(urlize('The link "http://example.com" is broken', {django_compatible: false}),
 	  'The link "<a href="http://example.com">http://example.com</a>" is broken');
-    equal(urlize('The link "www.example.com" is broken'),
+  equal(urlize('The link "www.example.com" is broken'),
 	  'The link "www.example.com" is broken');
-    equal(urlize('The link "www.example.com" is broken', {django_compatible: false}),
+  equal(urlize('The link "www.example.com" is broken', {django_compatible: false}),
 	  'The link "<a href="http://www.example.com">www.example.com</a>" is broken');
+});
+
+test('autoescape = TRUE replaces "/" with "&#47;"', function() {
+  equal(urlize('The link http://example.com with escaped / slashes', {autoescape: true}),
+    'The link <a href="http://example.com">http://example.com</a> with escaped / slashes');
+  equal(urlize('The link http://example.com with escaped / slashes', {django_compatible: false, autoescape: true}),
+    'The link <a href=\"http://example.com\">http:&#47;&#47;example.com</a> with escaped &#47; slashes');
 });
 
 // PENDING
 // test('Colon before', function () {
-//     equal(urlize('Here is the link:http://example.com'),
+//   equal(urlize('Here is the link:http://example.com'),
 // 	  'Here is the <a href="http://link:http://example.com">link:http://example.com</a>');
-//     equal(urlize('Here is the link:http://example.com', {django_compatible: false}),
+//   equal(urlize('Here is the link:http://example.com', {django_compatible: false}),
 // 	  'Here is the link:<a href="http://example.com">http://example.com</a>');
-//     equal(urlize('Here is the link:www.example.com'),
+//   equal(urlize('Here is the link:www.example.com'),
 // 	  'Here is the <a href="http://link:www.example.com">link:www.example.com</a>');
-//     equal(urlize('Here is the link:www.example.com', {django_compatible: false}),
+//   equal(urlize('Here is the link:www.example.com', {django_compatible: false}),
 // 	  'Here is the link:<a href="http://www.example.com">www.example.com</a>');
 // });
 
-test ('End trim period and paren', function () {
-    equal(urlize('(Go to http://www.ljosa.priv.no/foo.)', {django_compatible: false}),
+test('End trim period and paren', function () {
+  equal(urlize('(Go to http://www.ljosa.priv.no/foo.)', {django_compatible: false}),
 	  '(Go to <a href="http://www.ljosa.priv.no/foo">http://www.ljosa.priv.no/foo</a>.)');
 });

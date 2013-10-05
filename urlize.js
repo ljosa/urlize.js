@@ -171,14 +171,17 @@ var urlize = (function () {
   var simple_url_2_re = /^www\.|^(?!http)\w[^@]+\.(com|edu|gov|int|mil|net|org)$/i;
   var simple_email_re = /^\S+@\S+\.\S+$/;
 
-  function htmlescape(html) {
-    return html
+  function htmlescape(html, options) {
+    var escaped = html
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;")
-      .replace(/\//g, "&#47;");
+      .replace(/'/g, "&#39;");
+    if (options && !options.django_compatible) { // only on django_compatible because => https://github.com/ljosa/urlize.js/pull/9
+      escaped = escaped.replace(/\//g, "&#47;");
+    }
+    return escaped
   }
 
   function urlescape(url) {
@@ -265,10 +268,10 @@ var urlize = (function () {
           var trimmed = trim_url(middle);
           if (options.autoescape) {
             // XXX: Assuming autoscape == false
-            lead = htmlescape(lead);
-            trail = htmlescape(trail);
+            lead = htmlescape(lead, options);
+            trail = htmlescape(trail, options);
             url = urlescape(url);
-            trimmed = htmlescape(trimmed);
+            trimmed = htmlescape(trimmed, options);
           }
           middle = '<a href="' + url + '"' + nofollow_attr + target_attr + '>' + trimmed + '</a>';
           words[i] = lead + middle + trail;
@@ -276,13 +279,13 @@ var urlize = (function () {
           if (safe_input) {
             // Do nothing, as we have no mark_safe.
           } else if (options.autoescape) {
-            words[i] = htmlescape(word);
+            words[i] = htmlescape(word, options);
           }
         }
       } else if (safe_input) {
         // Do nothing, as we have no mark_safe.
       } else if (options.autoescape) {
-        words[i] = htmlescape(word);
+        words[i] = htmlescape(word, options);
       }
     }
     return words.join('');
