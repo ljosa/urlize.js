@@ -184,6 +184,20 @@ test('autoescape == True and double quotes', function () {
     '<a href="http://foo.bar/evilquote%22/%3Escript">http:&#47;&#47;foo.bar&#47;evilquote&quot;&#47;&gt;script</a>');
 });
 
+test('Mixed-case protocol', function () {
+    equal(urlize('My Link Http://www.Example.com'),
+          'My Link <a href="http://www.Example.com">Http://www.Example.com</a>');
+});
+
+test('Mixed-case TLD', function () {
+    equal(urlize('My Link example.Com'),
+          'My Link <a href="http://example.Com">example.Com</a>');
+});
+
+test('Mixed-case www', function () {
+    equal(urlize('My Link Www.example.no'),
+          'My Link <a href="http://Www.example.no">Www.example.no</a>');
+});
 
 module('convert_arguments');
 
@@ -264,25 +278,29 @@ test('enclosing fancy single quotes', function () {
 });
 
 test('enclosing double quotes', function () {
-  equal(urlize('The link "http://example.com" is broken'),
-   'The link "http://example.com" is broken');
-  equal(urlize('The link "http://example.com" is broken', {django_compatible: false}),
-   'The link "<a href="http://example.com">http://example.com</a>" is broken');
-  equal(urlize('The link "www.example.com" is broken'),
-   'The link "www.example.com" is broken');
-  equal(urlize('The link "www.example.com" is broken', {django_compatible: false}),
-   'The link "<a href="http://www.example.com">www.example.com</a>" is broken');
+    equal(urlize('The link "http://example.com" is broken'),
+	  'The link "http://example.com" is broken');
+    equal(urlize('The link "http://example.com" is broken', {django_compatible: false}),
+	  'The link "<a href="http://example.com">http://example.com</a>" is broken');
+    equal(urlize('The link "www.example.com" is broken'),
+	  'The link "www.example.com" is broken');
+    equal(urlize('The link "www.example.com" is broken', {django_compatible: false}),
+	  'The link "<a href="http://www.example.com">www.example.com</a>" is broken');
 });
 
 // PENDING
 // test('Colon before', function () {
 //     equal(urlize('Here is the link:http://example.com'),
-// 	  'Here is the link:http://example.com');
+// 	  'Here is the <a href="http://link:http://example.com">link:http://example.com</a>');
 //     equal(urlize('Here is the link:http://example.com', {django_compatible: false}),
 // 	  'Here is the link:<a href="http://example.com">http://example.com</a>');
 //     equal(urlize('Here is the link:www.example.com'),
-// 	  'Here is the link:www.example.com');
+// 	  'Here is the <a href="http://link:www.example.com">link:www.example.com</a>');
 //     equal(urlize('Here is the link:www.example.com', {django_compatible: false}),
 // 	  'Here is the link:<a href="http://www.example.com">www.example.com</a>');
 // });
 
+test ('End trim period and paren', function () {
+    equal(urlize('(Go to http://www.ljosa.priv.no/foo.)', {django_compatible: false}),
+	  '(Go to <a href="http://www.ljosa.priv.no/foo">http://www.ljosa.priv.no/foo</a>.)');
+});

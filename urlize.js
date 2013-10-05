@@ -146,7 +146,11 @@ var urlize = (function () {
   // Quotes a URL if it isn't already quoted.
   function smart_urlquote(url) {
     // XXX: Not handling IDN.
-    //
+    // 
+    // Convert protocol to lowercase.
+    var colonIndex = url.indexOf(':');
+    url = url.substring(0, colonIndex).toLowerCase() + url.substring(colonIndex);
+    // 
     // An URL is considered unquoted if it contains no % characters or
     // contains a % not followed by two hexadecimal digits.
     if (url.indexOf('%') == -1 || url.match(unquoted_percents_re)) {
@@ -156,14 +160,15 @@ var urlize = (function () {
     }
   }
 
-  var trailing_punctuation = ['.', ',', ':', ';'];
+  var trailing_punctuation_django = ['.', ',', ':', ';'];
+  var trailing_punctuation_improved = ['.', ',', ':', ';', '.)'];
   var wrapping_punctuation_django = [['(', ')'], ['<', '>'], ['&lt;', '&gt;']];
-  var wrapping_punctuation_improved = [['(', ')'], ['<', '>'], ['&lt;', '&gt;'],
-                                       ['“', '”'], ['‘', '’']];
+  var wrapping_punctuation_improved = [['(', ')'], ['<', '>'], ['&lt;', '&gt;'], 
+  				     ['“', '”'], ['‘', '’']];
   var word_split_re_django = /(\s+)/;
   var word_split_re_improved = /([\s<>"]+)/;
-  var simple_url_re = /^https?:(\/|(&#47;))(\/|(&#47;))\w/;
-  var simple_url_2_re = /^www\.|^(?!http)\w[^@]+\.(com|edu|gov|int|mil|net|org)$/;
+  var simple_url_re = /^https?:\/\/\w/i;
+  var simple_url_2_re = /^www\.|^(?!http)\w[^@]+\.(com|edu|gov|int|mil|net|org)$/i;
   var simple_email_re = /^\S+@\S+\.\S+$/;
 
   function htmlescape(html) {
@@ -210,6 +215,7 @@ var urlize = (function () {
     }
     var safe_input = false;
     var word_split_re = options.django_compatible ? word_split_re_django : word_split_re_improved;
+    var trailing_punctuation = options.django_compatible ? trailing_punctuation_django : trailing_punctuation_improved;
     var wrapping_punctuation = options.django_compatible ? wrapping_punctuation_django : wrapping_punctuation_improved;
     var words = split(text, word_split_re);
     for (var i = 0; i < words.length; i++) {
