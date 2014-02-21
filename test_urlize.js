@@ -1,3 +1,5 @@
+// using QUnit - https://qunitjs.com. Test is setup by ../test_urlize.html
+
 module('IE7');
 
 test('Two words, no URL', function () {
