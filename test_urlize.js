@@ -314,3 +314,35 @@ test('End trim period and paren', function () {
   equal(urlize('(Go to http://www.ljosa.priv.no/foo.)', {django_compatible: false}),
 	  '(Go to <a href="http://www.ljosa.priv.no/foo">http://www.ljosa.priv.no/foo</a>.)');
 });
+
+
+module('TLDs');
+
+test('ccTLDs', function () {
+    equal(urlize('example.co, example.io', {top_level_domains: urlize.top_level_domains}),
+          '<a href="http://example.co">example.co</a>, <a href="http://example.io">example.io</a>');
+});
+test('ccTLDs should not be recognized by default', function () {
+    equal(urlize('example.co, example.io'),
+          'example.co, example.io');
+});
+test('Recognize nothing if list of TLDs is empty', function () {
+    equal(urlize('example.com, example.io', {top_level_domains: []}),
+          'example.com, example.io');
+});
+test('Longer TLDs', function () {
+    equal(urlize('about.museum', {top_level_domains: urlize.top_level_domains}),
+          '<a href="http://about.museum">about.museum</a>');
+});
+test('Specific TLDs', function () {
+    equal(urlize('example.co, example.io', {top_level_domains: ['io']}),
+          'example.co, <a href="http://example.io">example.io</a>');
+});
+
+test('Non-existing TLDs', function () {
+    equal(urlize('image.jpg, Mr.Smith'),
+          'image.jpg, Mr.Smith');
+    equal(urlize('image.jpg, Mr.Smith',
+                 {top_level_domains: urlize.top_level_domains}),
+          'image.jpg, Mr.Smith');
+});

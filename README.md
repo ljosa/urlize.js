@@ -29,7 +29,7 @@ will almost certainly want to use this option when rendering text
 entered by a user in order to avoid spam links and cross-site
 scripting attacks.
 
-- *trim_url_limit*: Set to a positive integer not less than 3 in order
+- *trim\_url\_limit*: Set to a positive integer not less than 3 in order
 to truncate the displayed URLs (contents of the A elements) to three
 characters less than the specified length and add three periods (...).
 
@@ -37,10 +37,40 @@ characters less than the specified length and add three periods (...).
 to the generated `A` elements. For example, to make generate links
 that open in a new window, set to `_blank`.
 
-- *django_compatible*: Set to false in order to enable URL-detection
+- *django\_compatible*: Set to false in order to enable URL-detection
   improvements over Django's implementation. This option is true by
   default so that urlize.js in its default mode behaves exactly like
   Django's urlize function. See the section *Compatibility with Django*.
+
+- *top\_level\_domains*: A list of top-level-domains (TLDs) for which
+   URLs should be recognized. See the *Top-level domains* section below.
+
+### Top-level domains
+
+By default, urlize.js acts the way Django does: it recognizes URLs
+that don't start with "http" or "www" only if their top-level domain
+is one of the following: com, edu, gov, int, mil, net, org.
+
+You can give your own list of top-level domains to recognize using the
+*top\_level\_domains* option. For instance, if your site is mostly used
+in one or a few countries, it may make sense to add their country code
+top-level domains—unless you need Django compatibility, of course.
+
+If you would like urlize.js to recognize *all* top-level domains, you
+can load the file `top-level-domains.js` after you load
+`urlize.js`. This sets `urlize.top_level_domains` to the complete list
+of top-level domains. You can then pass its value to the
+*top_level_domains* option:
+
+```html
+<script type="text/javascript" src="urlize.js"></script>
+<script type="text/javascript" src="urlize_tlds.js"></script>
+…
+
+urlize('example.museum', {top_level_domains: urlize.top_level_domains})
+
+```
+
 
 ### Options as positional arguments (deprecated)
 
