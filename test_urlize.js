@@ -346,3 +346,19 @@ test('Non-existing TLDs', function () {
                  {top_level_domains: urlize.top_level_domains}),
           'image.jpg, Mr.Smith');
 });
+
+
+module('Trimming');
+
+test('trim: http', function () {
+    equal(urlize('http://www.example.com/', {trim: "http"}),
+          '<a href="http://www.example.com/">www.example.com/</a>');
+});
+test('trim: www', function () {
+    equal(urlize('http://www.example.com/', {trim: "www"}),
+          '<a href="http://www.example.com/">example.com/</a>');
+});
+test('no trim', function () {
+    equal(urlize('http://www.example.com/'),
+          '<a href="http://www.example.com/">http://www.example.com/</a>');
+});

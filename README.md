@@ -45,6 +45,11 @@ that open in a new window, set to `_blank`.
 - *top\_level\_domains*: A list of top-level-domains (TLDs) for which
    URLs should be recognized. See the *Top-level domains* section below.
 
+- *trim*: Set to "http" in order to remove the "http://" or "https://"
+   from the beginning of the rendered form of the link. Set to "www"
+   to also remove "www." if the hostname portion of the URI starts
+   with that. Setting this option breaks Django compatibility.
+
 ### Top-level domains
 
 By default, urlize.js acts the way Django does: it recognizes URLs

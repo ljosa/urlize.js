@@ -213,6 +213,10 @@ var urlize = (function () {
     options = convert_arguments(arguments);
 
     function trim_url(x, limit) {
+      if (options.trim === "http" || options.trim === "www")
+        x = x.replace(/^https?:\/\//i, '');
+      if (options.trim === "www")
+        x = x.replace(/^www\./i, '');
       if (limit === undefined) limit = options.trim_url_limit;
       if (limit && x.length > limit) return x.substr(0, limit - 3) + '...';
       return x;
