@@ -1,4 +1,29 @@
 
+VERSION = 1.0rc1
+BASENAME = urlize-js-$(VERSION)
+DEST = dist/$(BASENAME)
+
+release: $(DEST).tar.gz $(DEST).zip
+
+dist/$(BASENAME).tar.gz: dist/$(BASENAME)
+	tar -C dist -cvzf $@ $(BASENAME)
+
+dist/$(BASENAME).zip: dist/$(BASENAME)
+	(cd dist; zip -r $(BASENAME).zip $(BASENAME))
+
+SOURCES = urlize.js README.md LICENSE test_urlize.html test_urlize.js
+
+$(DEST): urlize.min.js urlize_tlds.js $(SOURCES)
+	test ! -e $(DEST)
+	test ! -e $(DEST).tmp
+	mkdir -p $(DEST).tmp
+	cp $+ $(DEST).tmp/
+	rm -rf $(DEST)
+	mv $(DEST).tmp $(DEST)
+
+maintainer-clean:
+	rm -f urlize.min.js urlize_tlds.js README.html root.zone
+	rm -rf dist
 
 ALL = urlize.min.js README.html urlize_tlds.js
 
