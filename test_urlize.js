@@ -1,3 +1,6 @@
+// Unit tests using QUnit (https://qunitjs.com/).
+// This is loaded from test_urlize.html.
+
 module('IE7');
 
 test('Two words, no URL', function () {
