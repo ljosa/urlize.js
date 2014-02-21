@@ -282,13 +282,13 @@ test('enclosing fancy single quotes', function () {
 
 test('enclosing double quotes', function () {
   equal(urlize('The link "http://example.com" is broken'),
-	  'The link "http://example.com" is broken');
+   'The link "http://example.com" is broken');
   equal(urlize('The link "http://example.com" is broken', {django_compatible: false}),
-	  'The link "<a href="http://example.com">http://example.com</a>" is broken');
+   'The link "<a href="http://example.com">http://example.com</a>" is broken');
   equal(urlize('The link "www.example.com" is broken'),
-	  'The link "www.example.com" is broken');
+   'The link "www.example.com" is broken');
   equal(urlize('The link "www.example.com" is broken', {django_compatible: false}),
-	  'The link "<a href="http://www.example.com">www.example.com</a>" is broken');
+   'The link "<a href="http://www.example.com">www.example.com</a>" is broken');
 });
 
 test('autoescape = TRUE replaces "/" with "&#47;"', function() {
@@ -301,16 +301,30 @@ test('autoescape = TRUE replaces "/" with "&#47;"', function() {
 // PENDING
 // test('Colon before', function () {
 //   equal(urlize('Here is the link:http://example.com'),
-// 	  'Here is the <a href="http://link:http://example.com">link:http://example.com</a>');
+//    'Here is the <a href="http://link:http://example.com">link:http://example.com</a>');
 //   equal(urlize('Here is the link:http://example.com', {django_compatible: false}),
-// 	  'Here is the link:<a href="http://example.com">http://example.com</a>');
+//    'Here is the link:<a href="http://example.com">http://example.com</a>');
 //   equal(urlize('Here is the link:www.example.com'),
-// 	  'Here is the <a href="http://link:www.example.com">link:www.example.com</a>');
+//    'Here is the <a href="http://link:www.example.com">link:www.example.com</a>');
 //   equal(urlize('Here is the link:www.example.com', {django_compatible: false}),
-// 	  'Here is the link:<a href="http://www.example.com">www.example.com</a>');
+//    'Here is the link:<a href="http://www.example.com">www.example.com</a>');
 // });
 
 test('End trim period and paren', function () {
   equal(urlize('(Go to http://www.ljosa.priv.no/foo.)', {django_compatible: false}),
-	  '(Go to <a href="http://www.ljosa.priv.no/foo">http://www.ljosa.priv.no/foo</a>.)');
+   '(Go to <a href="http://www.ljosa.priv.no/foo">http://www.ljosa.priv.no/foo</a>.)');
+});
+
+module('TLDs real and non-existent');
+
+test('Existing TLDs', function () {
+  equal(urlize('These exist: a.co, a.io'),
+   'These exist: <a href="http://a.co">a.co</a>, <a href="http://a.io">a.io</a>');
+  equal(urlize('Longer TLDs: about.museum'),
+   'Longer TLDs: <a href="http://about.museum">about.museum</a>');
+});
+
+test('Non-existing TLDs', function () {
+  equal(urlize('These are false matches: abc.xyz, image.jpg, Mr.Smith'),
+   'These are false matches: abc.xyz, image.jpg, Mr.Smith');
 });
