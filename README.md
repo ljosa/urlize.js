@@ -68,8 +68,8 @@ of top-level domains. You can then pass its value to the
 *top_level_domains* option:
 
 ```html
-<script type="text/javascript" src="urlize.js"></script>
-<script type="text/javascript" src="urlize_tlds.js"></script>
+<script src="urlize.js"></script>
+<script src="urlize_tlds.js"></script>
 …
 
 urlize('example.museum', {top_level_domains: urlize.top_level_domains})
