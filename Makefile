@@ -33,7 +33,7 @@ all: $(ALL)
 	uglifyjs $< > $@.tmp && mv $@.tmp $@ || rm -f $@
 
 urlize_tlds.js: root.zone
-	grep 'IN\tNS\t' root.zone | \
+	grep 'IN	NS	' root.zone | \
 	cut -f1 | sort -u | \
 	sed -e "s/^/'/" -e "s/\.$$/',/" | \
 	tr -d '\n' | \
