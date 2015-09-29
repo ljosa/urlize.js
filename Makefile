@@ -32,12 +32,14 @@ all: $(ALL)
 %.min.js: %.js
 	uglifyjs $< > $@.tmp && mv $@.tmp $@ || rm -f $@
 
+TLD_PREFIX = (function (r, f){if(typeof define=='function'\&\&define.amd){define('urlize_tlds',['urlize'],f)}else if(typeof exports=='object'){module.exports = f(require('.\/urlize'))}else{f(r.urlize)}}(this,function(urlize){urlize.top_level_domains=[
+
 urlize_tlds.js: root.zone
-	grep 'IN\tNS\t' root.zone | \
+	grep 'IN	NS	' root.zone | \
 	cut -f1 | sort -u | \
 	sed -e "s/^/'/" -e "s/\.$$/',/" | \
 	tr -d '\n' | \
-	sed -e "s/^'',/urlize.top_level_domains = [/" -e "s/,$$/\]\;/" > $@.tmp
+	sed -e "s/^'',/$(TLD_PREFIX)/" -e "s/,$$/\];return urlize}))/" > $@.tmp
 	mv $@.tmp $@
 
 root.zone:

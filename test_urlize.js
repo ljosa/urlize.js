@@ -1,7 +1,11 @@
 // Unit tests using QUnit (https://qunitjs.com/).
 // This is loaded from test_urlize.html.
 
-module('IE7');
+//these two lines ensure the test runs in amd_test.html and node.js
+function tests(urlize) {
+var test = QUnit.test;
+
+QUnit.module('IE7');
 
 test('Two words, no URL', function () {
   equal(urlize('foo bar'), 'foo bar');
@@ -11,7 +15,7 @@ test('Split words', function () {
   deepEqual(urlize.test.split('foo bar', /(\s+)/), ['foo', ' ', 'bar']);
 });
 
-module('Basic functionality');
+QUnit.module('Basic functionality');
 
 test('Bare', function () {
   equal(urlize('The website www.ljosa.com is down', true),
@@ -202,7 +206,7 @@ test('Mixed-case www', function () {
           'My Link <a href="http://Www.example.no">Www.example.no</a>');
 });
 
-module('convert_arguments');
+QUnit.module('convert_arguments');
 
 test('single argument', function () {
   deepEqual(urlize.test.convert_arguments(['foo']), {
@@ -247,7 +251,7 @@ test('django_compatible', function () {
 
 
 
-module('Improvements over Django');
+QUnit.module('Improvements over Django');
 
 test('adjacent angle brackets', function () {
   equal(urlize('<b>http://example.com</b>'), '<b>http://example.com</b>');
@@ -316,7 +320,7 @@ test('End trim period and paren', function () {
 });
 
 
-module('TLDs');
+QUnit.module('TLDs');
 
 test('ccTLDs', function () {
     equal(urlize('example.co, example.io', {top_level_domains: urlize.top_level_domains}),
@@ -348,7 +352,7 @@ test('Non-existing TLDs', function () {
 });
 
 
-module('Trimming');
+QUnit.module('Trimming');
 
 test('trim: http', function () {
     equal(urlize('http://www.example.com/', {trim: "http"}),
@@ -362,3 +366,14 @@ test('no trim', function () {
     equal(urlize('http://www.example.com/'),
           '<a href="http://www.example.com/">http://www.example.com/</a>');
 });
+
+
+//module dance boilerplate
+};
+if (typeof define === 'function' && define.amd) {
+  define(['./urlize_tlds'], tests);
+} else if (typeof exports === 'object') {
+  module.exports = tests(require('./urlize_tlds'));
+} else {
+  this.urlize = tests(this.urlize);
+}

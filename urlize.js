@@ -1,5 +1,15 @@
-var urlize = (function () {
-
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define('urlize', [], factory);
+  } else if (typeof exports === 'object') {
+    // Node. Does not work with strict CommonJS, but
+    module.exports = factory();
+  } else {
+    // Browser globals (root is window)
+    root.urlize = factory(root.b);
+  }
+}(this, function () {
   // From http://blog.stevenlevithan.com/archives/cross-browser-split
   // modified to not add itself to String.prototype.
 
@@ -305,4 +315,4 @@ var urlize = (function () {
   urlize.test.convert_arguments = convert_arguments;
 
   return urlize;
-})();
+}));
