@@ -212,7 +212,8 @@
         nofollow: args[1],
         autoescape: args[2],
         trim_url_limit: args[3],
-        target: args[4]
+        target: args[4],
+        attrs: args[5]
       };
     }
     if (!('django_compatible' in options)) options.django_compatible = true;
@@ -273,6 +274,12 @@
         var url = undefined;
         var nofollow_attr = options.nofollow ? ' rel="nofollow"' : '';
         var target_attr = options.target ? ' target="' + options.target + '"' : '';
+        
+        var other_attr = '';
+        
+        for(attr in options.attrs) {
+	        other_attr = options.attrs[attr] ? ' ' + attr + '="' + options.attrs[attr] + '"' : '';
+        }
 
         if (middle.match(simple_url_re)) url = smart_urlquote(middle);
         else if (middle.match(simple_url_2_re)) url = smart_urlquote('http://' + middle);
@@ -292,7 +299,7 @@
             url = urlescape(url);
             trimmed = htmlescape(trimmed, options);
           }
-          middle = '<a href="' + url + '"' + nofollow_attr + target_attr + '>' + trimmed + '</a>';
+          middle = '<a href="' + url + '"' + nofollow_attr + target_attr + other_attr + '>' + trimmed + '</a>';
           words[i] = lead + middle + trail;
         } else {
           if (safe_input) {
