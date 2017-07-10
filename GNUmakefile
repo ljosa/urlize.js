@@ -1,5 +1,5 @@
 
-VERSION = 1.0rc1
+VERSION = $(shell jq -r .version package.json)
 BASENAME = urlize-js-$(VERSION)
 DEST = dist/$(BASENAME)
 
@@ -11,7 +11,7 @@ dist/$(BASENAME).tar.gz: dist/$(BASENAME)
 dist/$(BASENAME).zip: dist/$(BASENAME)
 	(cd dist; zip -r $(BASENAME).zip $(BASENAME))
 
-SOURCES = urlize.js README.md LICENSE test_urlize.html test_urlize.js
+SOURCES = urlize.js README.md LICENSE test_urlize.js
 
 $(DEST): urlize.min.js urlize_tlds.js $(SOURCES)
 	test ! -e $(DEST)
@@ -30,7 +30,7 @@ ALL = urlize.min.js README.html urlize_tlds.js
 all: $(ALL)
 
 %.min.js: %.js
-	uglifyjs $< > $@.tmp && mv $@.tmp $@ || rm -f $@
+	./node_modules/uglify-js/bin/uglifyjs $< > $@.tmp && mv $@.tmp $@ || rm -f $@
 
 TLD_PREFIX = (function (r, f){if(typeof define=='function'\&\&define.amd){define('urlize_tlds',['urlize'],f)}else if(typeof exports=='object'){module.exports = f(require('.\/urlize'))}else{f(r.urlize)}}(this,function(urlize){urlize.top_level_domains=[
 
