@@ -210,6 +210,7 @@ QUnit.module('convert_arguments');
 
 test('single argument', function () {
   deepEqual(urlize.test.convert_arguments(['foo']), {
+   attrs: undefined,
    autoescape: undefined,
    nofollow: undefined,
    target: undefined,
@@ -372,19 +373,19 @@ QUnit.module('Additional HTML Attributes');
 	
 test('add single additional attributes', function () {
     equal(urlize('http://www.example.com/', {attrs: {position: 'left'}}),
-          '<a href="http://www.example.com/">www.example.com/</a>');
+          '<a href="http://www.example.com/" position="left">http://www.example.com/</a>');
 });
 test('add several additional attributes', function () {
     equal(urlize('http://www.example.com/', {attrs: {position: 'left', 'open-in-app': true}}),
-          '<a href="http://www.example.com/">www.example.com/</a>');
+          '<a href="http://www.example.com/" position="left" open-in-app="true">http://www.example.com/</a>');
 });
 test('add additional attributes with illegal values', function () {
     equal(urlize('http://www.example.com/', {attrs: {position: 'left', 'open-in-app': '",true'}}),
-          '<a href="http://www.example.com/">www.example.com/</a>');
+          '<a href="http://www.example.com/" position="left" open-in-app="%22%2Ctrue">http://www.example.com/</a>');
 });
 test('add additional attributes with illegal keys', function () {
     equal(urlize('http://www.example.com/', {attrs: {position: 'left', '"open,-in-app': '",true'}}),
-          '<a href="http://www.example.com/">www.example.com/</a>');
+          '<a href="http://www.example.com/" position="left" open-in-app="%22%2Ctrue">http://www.example.com/</a>');
 });
 
 //module dance boilerplate

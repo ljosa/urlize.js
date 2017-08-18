@@ -278,7 +278,7 @@
         var other_attr = '';
         
         for(attr in options.attrs) {
-	        other_attr = options.attrs[attr] ? ' ' + encodeURIComponent(attr) + '="' + encodeURIComponent( options.attrs[attr] ) + '"' : '';
+	        other_attr += options.attrs[attr] ? ' ' + attr.replace(/[^a-zA-Z0-9_.-]/gi, '') + '="' + encodeURIComponent( options.attrs[attr] ) + '"' : '';
         }
 
         if (middle.match(simple_url_re)) url = smart_urlquote(middle);
