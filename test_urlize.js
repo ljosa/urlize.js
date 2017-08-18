@@ -368,6 +368,25 @@ test('no trim', function () {
 });
 
 
+QUnit.module('Additional HTML Attributes');
+	
+test('add single additional attributes', function () {
+    equal(urlize('http://www.example.com/', {attrs: {position: 'left'}}),
+          '<a href="http://www.example.com/">www.example.com/</a>');
+});
+test('add several additional attributes', function () {
+    equal(urlize('http://www.example.com/', {attrs: {position: 'left', 'open-in-app': true}}),
+          '<a href="http://www.example.com/">www.example.com/</a>');
+});
+test('add additional attributes with illegal values', function () {
+    equal(urlize('http://www.example.com/', {attrs: {position: 'left', 'open-in-app': '",true'}}),
+          '<a href="http://www.example.com/">www.example.com/</a>');
+});
+test('add additional attributes with illegal keys', function () {
+    equal(urlize('http://www.example.com/', {attrs: {position: 'left', '"open,-in-app': '",true'}}),
+          '<a href="http://www.example.com/">www.example.com/</a>');
+});
+
 //module dance boilerplate
 };
 if (typeof define === 'function' && define.amd) {
