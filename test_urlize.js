@@ -203,97 +203,13 @@ describe('Basic functionality', function () {
   it('Mixed-case www', function () {
     assert.equal(urlize('My Link Www.example.no'),
           'My Link <a href="http://Www.example.no">Www.example.no</a>');
-<<<<<<< HEAD
-});
-
-QUnit.module('convert_arguments');
-
-test('single argument', function () {
-  deepEqual(urlize.test.convert_arguments(['foo']), {
-   attrs: undefined,
-   autoescape: undefined,
-   nofollow: undefined,
-   target: undefined,
-   trim_url_limit: undefined,
-   django_compatible: true
- });
-});
-
-test('two arguments, second is object', function () {
-  var d = {nofollow: true};
-  equal(urlize.test.convert_arguments(['foo', d]), d);
-});
-
-test('two arguments, second is boolean', function () {
-  ok(!urlize.test.convert_arguments(['foo', false]).nofollow);
-  equal(urlize.test.convert_arguments(['foo', true]).nofollow, true);
-});
-
-test('three arguments, third is boolean', function () {
-  equal(urlize.test.convert_arguments(['foo', false, false]).autoescape, false);
-  equal(urlize.test.convert_arguments(['foo', false, true]).autoescape, true);
-});
-
-test('four arguments, fourth is integer', function () {
-  equal(urlize.test.convert_arguments(['foo', false, false, undefined]).trim_url_limit, undefined);
-  equal(urlize.test.convert_arguments(['foo', false, false, 0]).trim_url_limit, 0);
-  equal(urlize.test.convert_arguments(['foo', false, false, 10]).trim_url_limit, 10);
-});
-
-test('five arguments, fifth is string', function () {
-  equal(urlize.test.convert_arguments(['foo', false, false, undefined, undefined]).target, undefined);
-  equal(urlize.test.convert_arguments(['foo', false, false, undefined, '_blank']).target, '_blank');
-});
-
-test('django_compatible', function () {
-  ok(urlize.test.convert_arguments(['foo']).django_compatible);
-  ok(!urlize.test.convert_arguments(['foo', {django_compatible: false}]).django_compatible);
-});
-
-
-
-QUnit.module('Improvements over Django');
-
-test('adjacent angle brackets', function () {
-  equal(urlize('<b>http://example.com</b>'), '<b>http://example.com</b>');
-  equal(urlize('<b>http://example.com</b>', {django_compatible: false}),
-   '<b><a href="http://example.com">http://example.com</a></b>');
-  equal(urlize('<b>www.example.com</b>'), '<b>www.example.com</b>');
-  equal(urlize('<b>www.example.com</b>', {django_compatible: false}),
-   '<b><a href="http://www.example.com">www.example.com</a></b>');
-});
-
-test('enclosing fancy double quotes', function () {
-  equal(urlize('The link “http://example.com” is broken'),
-   'The link “http://example.com” is broken');
-  equal(urlize('The link “http://example.com” is broken', {django_compatible: false}),
-   'The link “<a href="http://example.com">http://example.com</a>” is broken');
-  equal(urlize('The link “www.example.com” is broken'),
-   'The link “www.example.com” is broken');
-  equal(urlize('The link “www.example.com” is broken', {django_compatible: false}),
-   'The link “<a href="http://www.example.com">www.example.com</a>” is broken');
-});
-
-test('enclosing fancy single quotes', function () {
-  equal(urlize('The link ‘http://example.com’ is broken'),
-   'The link ‘http://example.com’ is broken');
-  equal(urlize('The link ‘http://example.com’ is broken', {django_compatible: false}),
-   'The link ‘<a href="http://example.com">http://example.com</a>’ is broken');
-  equal(urlize('The link ‘www.example.com’ is broken'),
-   'The link ‘www.example.com’ is broken');
-  equal(urlize('The link ‘www.example.com’ is broken', {django_compatible: false}),
-   'The link ‘<a href="http://www.example.com">www.example.com</a>’ is broken');
-});
-
-test('enclosing double quotes', function () {
-  equal(urlize('The link "http://example.com" is broken'),
-=======
   });
 });
 
 describe('convert_arguments', function () {
   it('single argument', function () {
     deepEqual(urlize.test.convert_arguments(['foo']), {
+	  attrs: undefined,
       autoescape: undefined,
       nofollow: undefined,
       target: undefined,
@@ -369,7 +285,6 @@ describe('Improvements over Django', function () {
 
   it('enclosing double quotes', function () {
     equal(urlize('The link "http://example.com" is broken'),
->>>>>>> ljosa/master
 	  'The link "http://example.com" is broken');
     equal(urlize('The link "http://example.com" is broken', {django_compatible: false}),
 	  'The link "<a href="http://example.com">http://example.com</a>" is broken');
@@ -450,36 +365,22 @@ describe('Trimming', function () {
           '<a href="http://www.example.com/">http://www.example.com/</a>');
   });
 });
-<<<<<<< HEAD
-
-
-QUnit.module('Additional HTML Attributes');
 	
-test('add single additional attributes', function () {
-    equal(urlize('http://www.example.com/', {attrs: {position: 'left'}}),
-          '<a href="http://www.example.com/" position="left">http://www.example.com/</a>');
+describe('Additional HTML Attributes', function () {
+	it('add single additional attributes', function () {
+	    equal(urlize('http://www.example.com/', {attrs: {position: 'left'}}),
+	          '<a href="http://www.example.com/" position="left">http://www.example.com/</a>');
+	});
+	it('add several additional attributes', function () {
+	    equal(urlize('http://www.example.com/', {attrs: {position: 'left', 'open-in-app': true}}),
+	          '<a href="http://www.example.com/" position="left" open-in-app="true">http://www.example.com/</a>');
+	});
+	it('add additional attributes with illegal values', function () {
+	    equal(urlize('http://www.example.com/', {attrs: {position: 'left', 'open-in-app': '",true'}}),
+	          '<a href="http://www.example.com/" position="left" open-in-app="%22%2Ctrue">http://www.example.com/</a>');
+	});
+	it('add additional attributes with illegal keys', function () {
+	    equal(urlize('http://www.example.com/', {attrs: {position: 'left', '"open,-in-app': '",true'}}),
+	          '<a href="http://www.example.com/" position="left" open-in-app="%22%2Ctrue">http://www.example.com/</a>');
+	});
 });
-test('add several additional attributes', function () {
-    equal(urlize('http://www.example.com/', {attrs: {position: 'left', 'open-in-app': true}}),
-          '<a href="http://www.example.com/" position="left" open-in-app="true">http://www.example.com/</a>');
-});
-test('add additional attributes with illegal values', function () {
-    equal(urlize('http://www.example.com/', {attrs: {position: 'left', 'open-in-app': '",true'}}),
-          '<a href="http://www.example.com/" position="left" open-in-app="%22%2Ctrue">http://www.example.com/</a>');
-});
-test('add additional attributes with illegal keys', function () {
-    equal(urlize('http://www.example.com/', {attrs: {position: 'left', '"open,-in-app': '",true'}}),
-          '<a href="http://www.example.com/" position="left" open-in-app="%22%2Ctrue">http://www.example.com/</a>');
-});
-
-//module dance boilerplate
-};
-if (typeof define === 'function' && define.amd) {
-  define(['./urlize_tlds'], tests);
-} else if (typeof exports === 'object') {
-  module.exports = tests(require('./urlize_tlds'));
-} else {
-  this.urlize = tests(this.urlize);
-}
-=======
->>>>>>> ljosa/master
