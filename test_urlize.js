@@ -376,11 +376,11 @@ describe('Additional HTML Attributes', function () {
 	          '<a href="http://www.example.com/" position="left" open-in-app="true">http://www.example.com/</a>');
 	});
 	it('add additional attributes with illegal values', function () {
-	    equal(urlize('http://www.example.com/', {attrs: {position: 'left', 'open-in-app': '",true'}}),
-	          '<a href="http://www.example.com/" position="left" open-in-app="%22%2Ctrue">http://www.example.com/</a>');
+	    equal(urlize('http://www.example.com/', {attrs: {position: 'left', 'open-in-app': '"/true'}}),
+	          '<a href="http://www.example.com/" position="left" open-in-app="&quot;&#47;true">http://www.example.com/</a>');
 	});
 	it('add additional attributes with illegal keys', function () {
-	    equal(urlize('http://www.example.com/', {attrs: {position: 'left', '"open,-in-app': '",true'}}),
-	          '<a href="http://www.example.com/" position="left" open-in-app="%22%2Ctrue">http://www.example.com/</a>');
+	    equal(urlize('http://www.example.com/', {attrs: {position: 'left', '"open,-in-app': '"/true'}}),
+	          '<a href="http://www.example.com/" position="left" open-in-app="&quot;&#47;true">http://www.example.com/</a>');
 	});
 });

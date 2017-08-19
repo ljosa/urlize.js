@@ -1,4 +1,4 @@
-(function (root, factory) {
+(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define('urlize', [], factory);
@@ -9,7 +9,7 @@
     // Browser globals (root is window)
     root.urlize = factory(root.b);
   }
-}(this, function () {
+}(this, function() {
   // From http://blog.stevenlevithan.com/archives/cross-browser-split
   // modified to not add itself to String.prototype.
 
@@ -47,13 +47,13 @@
   var split;
 
   // Avoid running twice; that would break the `nativeSplit` reference
-  split = split || function (undef) {
+  split = split || function(undef) {
 
     var nativeSplit = String.prototype.split,
       compliantExecNpcg = /()??/.exec("")[1] === undef, // NPCG: nonparticipating capturing group
       self;
 
-    self = function (str, separator, limit) {
+    self = function(str, separator, limit) {
       // If `separator` is not a regex, use `nativeSplit`
       if (Object.prototype.toString.call(separator) !== "[object RegExp]") {
         return nativeSplit.call(str, separator, limit);
@@ -92,7 +92,7 @@
           // Fix browsers whose `exec` methods don't consistently return `undefined` for
           // nonparticipating capturing groups
           if (!compliantExecNpcg && match.length > 1) {
-            match[0].replace(separator2, function () {
+            match[0].replace(separator2, function() {
               for (var i = 1; i < arguments.length - 2; i++) {
                 if (arguments[i] === undef) {
                   match[i] = undef;
@@ -125,7 +125,36 @@
 
     return self;
   }();
+  
+  RegExp.escape = function(text) {
+	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+  }
 
+  String.prototype.mapReplace = function (replacements) {
+	var regex = [];
+	
+	for (var prop in replacements) {
+	    regex.push(RegExp.escape(prop));
+	  }
+	
+	regex = new RegExp( regex.join('|'), "g" );
+	
+	return this.replace(regex, function(match){
+	  return replacements[match];
+	});
+  }
+  
+  String.prototype.escapeHtml = function() {
+    return this.mapReplace({
+      '<': '&lt;',
+      '>': '&gt;',
+      ' ': '&nbsp;',
+      '"': '&quot;',
+      "'": '&#8216;',
+      '/': '&#47;',
+      '=': '&#61;'
+    });
+  };
 
   function startswith(string, prefix) {
     return string.substr(0, prefix.length) == prefix;
@@ -172,9 +201,18 @@
 
   var trailing_punctuation_django = ['.', ',', ':', ';'];
   var trailing_punctuation_improved = ['.', ',', ':', ';', '.)'];
-  var wrapping_punctuation_django = [['(', ')'], ['<', '>'], ['&lt;', '&gt;']];
-  var wrapping_punctuation_improved = [['(', ')'], ['<', '>'], ['&lt;', '&gt;'], 
-  				     ['“', '”'], ['‘', '’']];
+  var wrapping_punctuation_django = [
+    ['(', ')'],
+    ['<', '>'],
+    ['&lt;', '&gt;']
+  ];
+  var wrapping_punctuation_improved = [
+    ['(', ')'],
+    ['<', '>'],
+    ['&lt;', '&gt;'],
+    ['“', '”'],
+    ['‘', '’']
+  ];
   var word_split_re_django = /(\s+)/;
   var word_split_re_improved = /([\s<>"]+)/;
   var simple_url_re = /^https?:\/\/\w/i;
@@ -205,7 +243,7 @@
 
   function convert_arguments(args) {
     var options;
-    if (args.length == 2 && typeof (args[1]) == 'object') {
+    if (args.length == 2 && typeof(args[1]) == 'object') {
       options = args[1];
     } else {
       options = {
@@ -236,10 +274,10 @@
     var word_split_re = options.django_compatible ? word_split_re_django : word_split_re_improved;
     var trailing_punctuation = options.django_compatible ? trailing_punctuation_django : trailing_punctuation_improved;
     var wrapping_punctuation = options.django_compatible ? wrapping_punctuation_django : wrapping_punctuation_improved;
-    var simple_url_2_re = new RegExp('^www\\.|^(?!http)\\w[^@]+\\.(' + 
-                        (options.top_level_domains || django_top_level_domains).join('|') + 
-                        ')$', 
-                        "i");
+    var simple_url_2_re = new RegExp('^www\\.|^(?!http)\\w[^@]+\\.(' +
+      (options.top_level_domains || django_top_level_domains).join('|') +
+      ')$',
+      "i");
     var words = split(text, word_split_re);
     for (var i = 0; i < words.length; i++) {
       var word = words[i];
@@ -274,11 +312,11 @@
         var url = undefined;
         var nofollow_attr = options.nofollow ? ' rel="nofollow"' : '';
         var target_attr = options.target ? ' target="' + options.target + '"' : '';
-        
+
         var other_attr = '';
-        
-        for(attr in options.attrs) {
-	        other_attr += options.attrs[attr] ? ' ' + attr.replace(/[^a-zA-Z0-9_.-]/gi, '') + '="' + encodeURIComponent( options.attrs[attr] ) + '"' : '';
+
+        for (attr in options.attrs) {
+          other_attr += options.attrs[attr] ? ' ' + attr.replace(/[^a-zA-Z0-9_.-]/gi, '') + '="' + String(options.attrs[attr]).escapeHtml() + '"' : '';
         }
 
         if (middle.match(simple_url_re)) url = smart_urlquote(middle);
@@ -323,3 +361,4 @@
 
   return urlize;
 }));
+
