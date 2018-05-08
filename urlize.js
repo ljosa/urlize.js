@@ -235,7 +235,7 @@
     var word_split_re = options.django_compatible ? word_split_re_django : word_split_re_improved;
     var trailing_punctuation = options.django_compatible ? trailing_punctuation_django : trailing_punctuation_improved;
     var wrapping_punctuation = options.django_compatible ? wrapping_punctuation_django : wrapping_punctuation_improved;
-    var simple_url_2_re = new RegExp('^www\\.|^(?!http)\\w[^@]+\\.(' + 
+    var simple_url_2_re = new RegExp('^www\\.|^(?!http)\\w[^@.]+\\.(' + 
                         (options.top_level_domains || django_top_level_domains).join('|') + 
                         ')$', 
                         "i");
