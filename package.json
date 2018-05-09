@@ -1,6 +1,6 @@
 {
   "name": "urlize.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "JavaScript port of Django's function for converting URLs in text into clickable links",
   "main": "urlize.js",
   "scripts": {
