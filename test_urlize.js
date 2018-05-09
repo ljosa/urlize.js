@@ -204,6 +204,11 @@ describe('Basic functionality', function () {
     assert.equal(urlize('My Link Www.example.no'),
           'My Link <a href="http://Www.example.no">Www.example.no</a>');
   });
+
+  it('Consecutive dots', function () {
+    assert.equal(urlize('something...edu'), '<a href="http://something...edu">something...edu</a>')
+    assert.equal(urlize('something...edu', {django_compatible: false}), 'something...edu')
+  })
 });
 
 describe('convert_arguments', function () {

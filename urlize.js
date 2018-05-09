@@ -156,11 +156,11 @@
   // Quotes a URL if it isn't already quoted.
   function smart_urlquote(url) {
     // XXX: Not handling IDN.
-    // 
+    //
     // Convert protocol to lowercase.
     var colonIndex = url.indexOf(':');
     url = url.substring(0, colonIndex).toLowerCase() + url.substring(colonIndex);
-    // 
+    //
     // An URL is considered unquoted if it contains no % characters or
     // contains a % not followed by two hexadecimal digits.
     if (url.indexOf('%') == -1 || url.match(unquoted_percents_re)) {
@@ -173,7 +173,7 @@
   var trailing_punctuation_django = ['.', ',', ':', ';'];
   var trailing_punctuation_improved = ['.', ',', ':', ';', '.)'];
   var wrapping_punctuation_django = [['(', ')'], ['<', '>'], ['&lt;', '&gt;']];
-  var wrapping_punctuation_improved = [['(', ')'], ['<', '>'], ['&lt;', '&gt;'], 
+  var wrapping_punctuation_improved = [['(', ')'], ['<', '>'], ['&lt;', '&gt;'],
   				     ['“', '”'], ['‘', '’']];
   var word_split_re_django = /(\s+)/;
   var word_split_re_improved = /([\s<>"]+)/;
@@ -235,9 +235,9 @@
     var word_split_re = options.django_compatible ? word_split_re_django : word_split_re_improved;
     var trailing_punctuation = options.django_compatible ? trailing_punctuation_django : trailing_punctuation_improved;
     var wrapping_punctuation = options.django_compatible ? wrapping_punctuation_django : wrapping_punctuation_improved;
-    var simple_url_2_re = new RegExp('^www\\.|^(?!http)\\w[^@]+\\.(' + 
-                        (options.top_level_domains || django_top_level_domains).join('|') + 
-                        ')$', 
+    var simple_url_2_re = new RegExp('^www\\.|^(?!http)\\w[^@' + (options.django_compatible ? '' : '.') + ']+\\.(' +
+                        (options.top_level_domains || django_top_level_domains).join('|') +
+                        ')$',
                         "i");
     var words = split(text, word_split_re);
     for (var i = 0; i < words.length; i++) {
