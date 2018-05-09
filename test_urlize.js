@@ -206,7 +206,8 @@ describe('Basic functionality', function () {
   });
 
   it('Consecutive dots', function () {
-    assert.equal(urlize('something...edu'), 'something...edu')
+    assert.equal(urlize('something...edu'), '<a href="http://something...edu">something...edu</a>')
+    assert.equal(urlize('something...edu', {django_compatible: false}), 'something...edu')
   })
 });
 
